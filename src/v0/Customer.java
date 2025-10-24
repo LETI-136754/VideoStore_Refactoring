@@ -1,4 +1,4 @@
-package ficha_3;
+package v0;
 
 import java.util.Vector;
 
@@ -32,9 +32,27 @@ public class Customer
 		
 		for (Rental each: _rentals)
 		{
-            double thisAmount = getAmount(each);
+			double thisAmount = 0;
 
-            // add frequent renter points
+			// determine amounts for each line
+			switch (each.getMovie().getPriceCode())
+			{
+				case REGULAR:
+					thisAmount += 2;
+					if (each.getDaysRented() > 2)
+						thisAmount += (each.getDaysRented() - 2) * 1.5;
+					break;
+				case NEW_RELEASE:
+					thisAmount += each.getDaysRented() * 3;
+					break;
+				case CHILDRENS:
+					thisAmount += 1.5;
+					if (each.getDaysRented() > 3)
+						thisAmount += (each.getDaysRented() - 3) * 1.5;
+					break;
+			}
+
+			// add frequent renter points
 			frequentRenterPoints++;
 
 			// add bonus for a two day new release rental
@@ -51,27 +69,4 @@ public class Customer
 		result += "You earned " + frequentRenterPoints + " frequent renter points";
 		return result;
 	}
-
-    private static double getAmount(Rental each) {
-        double thisAmount = 0;
-
-        // determine amounts for each line
-        switch (each.getMovie().getPriceCode())
-        {
-            case REGULAR:
-                thisAmount += 2;
-                if (each.getDaysRented() > 2)
-                    thisAmount += (each.getDaysRented() - 2) * 1.5;
-                break;
-            case NEW_RELEASE:
-                thisAmount += each.getDaysRented() * 3;
-                break;
-            case CHILDRENS:
-                thisAmount += 1.5;
-                if (each.getDaysRented() > 3)
-                    thisAmount += (each.getDaysRented() - 3) * 1.5;
-                break;
-        }
-        return thisAmount;
-    }
 }
