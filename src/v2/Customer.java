@@ -1,4 +1,4 @@
-package ficha_3;
+package v2;
 
 import java.util.Vector;
 
@@ -25,16 +25,21 @@ public class Customer
 	public String statement()
 	{
 		double totalAmount = 0;
-        int frequentRenterPoints = 0;
+		int frequentRenterPoints = 0;
 
-        // header
+		// header
 		String result = "Rental Record for " + getName() + "\n";
 		
 		for (Rental each: _rentals)
 		{
-            double thisAmount = each.getAmount();
+			double thisAmount = each.getAmount();
 
-            frequentRenterPoints += getFrequentRentalPoints(each);
+			// add frequent renter points
+			frequentRenterPoints++;
+
+			// add bonus for a two day new release rental
+			if ((each.getMovie().getPriceCode() == Movie.Code.NEW_RELEASE) && each.getDaysRented() > 1)
+				frequentRenterPoints++;
 
 			// show figures for this rental
 			result += "\t" + each.getMovie().getTitle() + "\t" + thisAmount + "\n";
@@ -46,10 +51,4 @@ public class Customer
 		result += "You earned " + frequentRenterPoints + " frequent renter points";
 		return result;
 	}
-
-    public int getFrequentRentalPoints(Rental each)
-    {
-        return ((each.getMovie().getPriceCode() == Movie.Code.NEW_RELEASE) && each.getDaysRented() > 1) ? 2 : 1;
-    }
-
 }
